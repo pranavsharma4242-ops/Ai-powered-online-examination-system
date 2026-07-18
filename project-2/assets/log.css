@@ -1,0 +1,286 @@
+/* 🌐 Base Styles (Desktop First) */
+body {
+  background: #f4f9ff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+.hero {
+  min-height: 93vh;
+  display: flex;
+  align-items: center;
+  padding: 30px 0;
+}
+
+.hero-text {
+  padding: 20px;
+}
+
+.hero-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+}
+
+.form-box {
+  max-width: 480px;
+  margin: 0 auto;
+  background: white;
+  padding: 45px 35px;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transition: 0.3s ease-in-out;
+}
+
+.logo {
+  font-size: 34px;
+  font-weight: bold;
+  color: #3f51b5;
+  margin-bottom: 20px;
+}
+
+.form-box h2 {
+  font-weight: 600;
+  margin-bottom: 28px;
+  color: #2c3e50;
+}
+
+.form-control {
+  border-radius: 10px;
+}
+
+.form-control:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 0.2rem rgba(63, 81, 181, 0.25);
+}
+
+.input-group .btn {
+  border-radius: 0 10px 10px 0;
+}
+
+.btn-primary {
+  background-color: #3f51b5;
+  border-color: #3f51b5;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #303f9f;
+  border-color: #303f9f;
+}
+
+.alert {
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+/* ✅ Tablets */
+/* 📱 Tablet-specific tweaks (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero img {
+    max-width: 90%;
+    height: auto;
+    margin-top: 1rem;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .card {
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+
+  .form-control,
+  .btn {
+    font-size: 0.95rem;
+  }
+}
+
+/* ✅ Base Layout */
+.hero {
+  background: #f5f8ff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 60px 0;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  color: #3f51b5;
+}
+
+.form-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ✅ Tablets (768px to 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .hero {
+    padding: 50px 0;
+  }
+
+  .hero img {
+    max-width: 90%;
+    margin-top: 20px;
+  }
+
+  .logo {
+    font-size: 30px;
+  }
+
+  .form-box {
+    padding: 35px 25px;
+  }
+
+  .form-box h2 {
+    font-size: 26px;
+  }
+
+  .btn,
+  .form-control {
+    font-size: 1rem;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+}
+
+/* ✅ Phones */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    padding: 40px 0;
+    text-align: center;
+  }
+
+  .form-box {
+    margin-top: 30px;
+    padding: 30px 20px;
+  }
+
+  .logo {
+    font-size: 38px;
+  }
+
+  .form-box h2 {
+    font-size: 24px;
+  }
+
+  .btn,
+  .form-control {
+    font-size: 0.95rem;
+  }
+
+  .hero img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 25px;
+  }
+}
+
+/* ✅ Extra Small Devices */
+@media (max-width: 576px) {
+  .form-box {
+    padding: 24px 15px;
+  }
+
+  .form-box h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+
+  .hero-text p {
+    font-size: 15px;
+  }
+
+  .hero img {
+    margin-top: 15px;
+    max-height: 200px;
+  }
+}
+
+
+/* Loader overlay */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+/* Spinner Circle */
+.loader-icon {
+  font-size: 48px;
+  color: #3f51b5;
+  animation: spin 1s linear infinite;
+}
+
+#loader p {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #3f51b5;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+.dark-mode {
+  background-color: #121212 !important;
+  color: #f1f1f1 !important;
+}
+
+.dark-mode .form-box {
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+.dark-mode input,
+.dark-mode .form-control {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.dark-mode a {
+  color: #90caf9;
+}
+
+
+
