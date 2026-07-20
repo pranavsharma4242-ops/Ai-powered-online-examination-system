@@ -1101,20 +1101,7 @@ function timeAgo(?string $datetime): string
 
 </section>
       
-<!-- ----------------- -->
-      <!-- <div class="page" id="page-dashboard">
-    <div class="hero">
-      <div>
-        <h1>Welcome back, Simran 👋</h1>
-        <p>You're 68% through your DSA roadmap. Keep going — 4 notes left this week.</p>
-      </div>
-       <div class="hero-stats">
-          <div class="hero-stat"><strong><?php echo $stats['notes']; ?></strong><span>Notes</span></div>
-          <div class="hero-stat"><strong><?php echo $stats['videos']; ?></strong><span>Videos</span></div>
-          <div class="hero-stat"><strong><?php echo $stats['free']; ?></strong><span>Free</span></div>
-        </div>
-    </div> -->
-<!-- ------------- -->
+
       <section class="info-grid">
         <div class="info-card">
           <span class="icon-soft"><i class="bi bi-file-earmark-text"></i></span>
@@ -1178,7 +1165,7 @@ function timeAgo(?string $datetime): string
     <p><?php echo ucfirst($note['material_format'] ?? 'pdf'); ?> · <?php echo $note['note_type'] === 'premium' ? 'Premium' : 'Free'; ?></p>
     <div class="meta-row">
       <span class="rating"><i class="bi bi-star-fill me-1"></i><?php echo number_format((float) ($note['rating'] ?? 4), 1); ?> <span class="rating-count">(<?php echo (int)($note['rating_count'] ?? 0); ?>)</span></span>
-                          <span><?php echo date("d M Y", strtotime($note['upload_date'])); ?></span>
+      <span><?php echo date("d M Y", strtotime($note['upload_date'])); ?></span>
     </div>
     <a href="../uploads/<?php echo htmlspecialchars($note['filename']); ?>" target="_blank" class="btn-main"><i class="bi bi-download"></i> Download PDF</a>
   </div>

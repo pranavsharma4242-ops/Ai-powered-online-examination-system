@@ -14,8 +14,8 @@ function sendOTPEmail($email, $otp) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'sagniksaha847@gmail.com';       // ✅ Your Gmail
-        $mail->Password   = "wjxktpolcdwadsul";               // ✅ Your Gmail App Password
+        $mail->Username   = 'sagniksaha847@gmail.com';       
+        $mail->Password   = "wjxktpolcdwadsul";               
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 

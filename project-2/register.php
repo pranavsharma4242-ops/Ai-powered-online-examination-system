@@ -4,7 +4,7 @@ include 'includes/config.php';
 $msg = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Fetch and store input
+    
     $name     = trim($_POST['name']);
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     elseif (!in_array($role, ['admin', 'student'])) {
         $msg = "Invalid role selected!";
     }
-    // Validate password match
+  
     elseif ($password !== $confirm) {
         $msg = "Passwords do not match!";
     } else {
@@ -37,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $msg = "Email already registered!";
         } else {
       
-
 
 
             $stmt = $conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
