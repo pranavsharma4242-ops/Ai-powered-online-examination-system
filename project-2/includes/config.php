@@ -35,4 +35,9 @@ $ratingColumn = $conn->query("SHOW COLUMNS FROM notes_final LIKE 'rating'");
 if ($ratingColumn && $ratingColumn->num_rows === 0) {
     $conn->query("ALTER TABLE notes_final ADD COLUMN rating DECIMAL(3,1) NOT NULL DEFAULT 4.0 AFTER price");
 }
+
+$blockedColumn = $conn->query("SHOW COLUMNS FROM users LIKE 'is_blocked'");
+if ($blockedColumn && $blockedColumn->num_rows === 0) {
+    $conn->query("ALTER TABLE users ADD COLUMN is_blocked TINYINT(1) NOT NULL DEFAULT 0 AFTER role");
+}
 ?>

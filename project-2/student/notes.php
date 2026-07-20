@@ -5,6 +5,7 @@ include '../includes/auth_student.php';
 $type = $_GET['type'] ?? 'free';
 $type = ($type === 'premium') ? 'premium' : 'free';
 $search = trim($_GET['search'] ?? '');
+$level = trim($_GET['level'] ?? '');
 
 $sql = "SELECT * FROM notes_final WHERE note_type = ? AND resource_type = 'note'";
 $types = "s";
@@ -16,6 +17,12 @@ if ($search !== '') {
     $types .= "ss";
     $params[] = $searchLike;
     $params[] = $searchLike;
+}
+
+if (in_array($level, ['beginner', 'intermediate', 'advanced'], true)) {
+    $sql .= " AND difficulty_level = ?";
+    $types .= "s";
+    $params[] = $level;
 }
 
 $sql .= " ORDER BY upload_date DESC";
@@ -319,7 +326,11 @@ $noteCount = $result->num_rows;
 
     <main class="main">
       <div class="topbar">
-        <div class="search-shell"><i class="bi bi-search"></i><input type="text" placeholder="Search notes, subjects or videos..."></div>
+        <form method="GET" class="search-shell">
+          <input type="hidden" name="type" value="<?php echo htmlspecialchars($type); ?>">
+          <input type="hidden" name="level" value="<?php echo htmlspecialchars($level); ?>">
+          <i class="bi bi-search"></i><input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search by subject or topic">
+        </form>
         <div class="top-actions">
           <a href="video_lessons.php" class="notify-btn"><i class="bi bi-bell"></i></a>
           <a href="profile.php" class="profile-pill"><span class="avatar"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></span><span><?php echo htmlspecialchars($_SESSION['name']); ?></span></a>
@@ -327,14 +338,12 @@ $noteCount = $result->num_rows;
       </div>
 
       <div class="pill-row">
-        <a href="notes.php?type=free" class="pill active">All Subjects</a>
-        <a href="notes.php?type=<?php echo urlencode($type); ?>&search=DSA" class="pill">DSA</a>
-        <a href="notes.php?type=<?php echo urlencode($type); ?>&search=DBMS" class="pill">DBMS</a>
-        <a href="notes.php?type=<?php echo urlencode($type); ?>&search=Web" class="pill">Web Development</a>
-        <a href="notes.php?type=<?php echo urlencode($type); ?>&search=Operating" class="pill">Operating Systems</a>
-        <span class="pill">Beginner</span>
-        <span class="pill">Intermediate</span>
-        <span class="pill">Advanced</span>
+        <a href="notes.php?type=free" class="pill <?php echo $type === 'free' && $search === '' && $level === '' ? 'active' : ''; ?>">Free Notes</a>
+        <a href="notes.php?type=premium" class="pill <?php echo $type === 'premium' && $search === '' && $level === '' ? 'active' : ''; ?>">Premium Notes</a>
+        <a href="notes.php?type=<?php echo urlencode($type); ?><?php echo $search !== '' ? '&search=' . urlencode($search) : ''; ?>" class="pill <?php echo $level === '' ? 'active' : ''; ?>">All Levels</a>
+        <a href="notes.php?type=<?php echo urlencode($type); ?>&level=beginner<?php echo $search !== '' ? '&search=' . urlencode($search) : ''; ?>" class="pill <?php echo $level === 'beginner' ? 'active' : ''; ?>">Beginner</a>
+        <a href="notes.php?type=<?php echo urlencode($type); ?>&level=intermediate<?php echo $search !== '' ? '&search=' . urlencode($search) : ''; ?>" class="pill <?php echo $level === 'intermediate' ? 'active' : ''; ?>">Intermediate</a>
+        <a href="notes.php?type=<?php echo urlencode($type); ?>&level=advanced<?php echo $search !== '' ? '&search=' . urlencode($search) : ''; ?>" class="pill <?php echo $level === 'advanced' ? 'active' : ''; ?>">Advanced</a>
       </div>
 
       <section class="section-head">
@@ -366,13 +375,15 @@ $noteCount = $result->num_rows;
               </div>
               <div class="body-card">
                 <h5><?php echo htmlspecialchars($row['topic']); ?></h5>
-                <p class="desc"><?php echo $type === 'premium' ? 'Premium note card.' : 'Core note with quick access.'; ?></p>
+                <p class="desc"><?php echo $type === 'premium' ? 'Premium note. Upgrade is required before download.' : 'Free note ready for direct download.'; ?></p>
                 <div class="meta">
                   <span class="stars"><i class="bi bi-star-fill me-1"></i><?php echo number_format((float) ($row['rating'] ?? 4), 1); ?></span>
                   <span><?php echo $fileSize; ?></span>
                 </div>
                 <?php if ($type === 'premium'): ?>
                   <a href="premium.php" class="btn-main btn-brand"><i class="bi bi-lock"></i> Unlock Premium</a>
+                <?php elseif (!file_exists($filePath)): ?>
+                  <button type="button" class="btn-main btn-brand" disabled><i class="bi bi-file-earmark-x"></i> PDF Missing</button>
                 <?php else: ?>
                   <a href="<?php echo htmlspecialchars($filePath); ?>" target="_blank" class="btn-main btn-brand"><i class="bi bi-download"></i> Download PDF</a>
                 <?php endif; ?>
@@ -381,7 +392,7 @@ $noteCount = $result->num_rows;
           <?php endwhile; ?>
         </div>
       <?php else: ?>
-        <div class="note-card empty-card"><h4 class="fw-bold mb-2">No notes found</h4><p class="text-muted mb-0">Try another subject or open another section.</p></div>
+        <div class="note-card empty-card"><h4 class="fw-bold mb-2">No notes found</h4><p class="text-muted mb-0">Try another search, switch level, or open the <?php echo $type === 'premium' ? 'free notes' : 'premium notes'; ?> section.</p></div>
       <?php endif; ?>
     </main>
   </div>

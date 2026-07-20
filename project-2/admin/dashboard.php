@@ -12,7 +12,9 @@ $stats = [
     'free' => 0,
     'premium' => 0,
     'videos' => 0,
-    'handwritten' => 0
+    'handwritten' => 0,
+    'students' => 0,
+    'blocked_students' => 0
 ];
 
 $statsQuery = $conn->query("
@@ -34,8 +36,29 @@ if ($statsQuery && $statsQuery->num_rows === 1) {
     $stats['handwritten'] = (int) ($row['handwritten_notes'] ?? 0);
 }
 
+$studentStatsQuery = $conn->query("
+    SELECT
+        COUNT(*) AS total_students,
+        SUM(CASE WHEN is_blocked = 1 THEN 1 ELSE 0 END) AS blocked_students
+    FROM users
+    WHERE role = 'student'
+");
+
+if ($studentStatsQuery && $studentStatsQuery->num_rows === 1) {
+    $row = $studentStatsQuery->fetch_assoc();
+    $stats['students'] = (int) ($row['total_students'] ?? 0);
+    $stats['blocked_students'] = (int) ($row['blocked_students'] ?? 0);
+}
+
 $latestNotes = $conn->query("SELECT * FROM notes_final WHERE resource_type = 'note' ORDER BY upload_date DESC LIMIT 5");
 $latestVideos = $conn->query("SELECT * FROM notes_final WHERE resource_type = 'video' ORDER BY upload_date DESC LIMIT 5");
+$studentsResult = $conn->query("
+    SELECT id, name, email, is_blocked, created_at
+    FROM users
+    WHERE role = 'student'
+    ORDER BY created_at DESC
+    LIMIT 10
+");
 ?>
 
 <!DOCTYPE html>
@@ -250,7 +273,8 @@ $latestVideos = $conn->query("SELECT * FROM notes_final WHERE resource_type = 'v
 
     .type-badge,
     .price-badge,
-    .db-chip {
+    .db-chip,
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
@@ -279,6 +303,16 @@ $latestVideos = $conn->query("SELECT * FROM notes_final WHERE resource_type = 'v
       background: var(--blue-bg);
       color: var(--soft-gray);
       border: 1px solid var(--border);
+    }
+
+    .status-badge.active-user {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status-badge.blocked-user {
+      background: var(--coral-soft);
+      color: var(--coral);
     }
 
     .action-btn {
@@ -377,6 +411,20 @@ $latestVideos = $conn->query("SELECT * FROM notes_final WHERE resource_type = 'v
         <div class="stat-icon"><i class="bi bi-pencil-square"></i></div>
         <h3><?php echo $stats['handwritten']; ?></h3>
         <p>Handwritten notes</p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="bi bi-people"></i></div>
+        <h3><?php echo $stats['students']; ?></h3>
+        <p>Registered students</p>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="bi bi-person-x"></i></div>
+        <h3><?php echo $stats['blocked_students']; ?></h3>
+        <p>Blocked students</p>
       </div>
     </div>
   </section>
@@ -564,6 +612,62 @@ $latestVideos = $conn->query("SELECT * FROM notes_final WHERE resource_type = 'v
           <?php else: ?>
             <tr>
               <td colspan="9" class="text-muted py-4">No videos uploaded yet.</td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="table-card mt-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+      <div>
+        <h5 class="mb-1">Student Login Access</h5>
+        <p class="mb-0 text-muted">Block or unblock students from signing in to the portal.</p>
+      </div>
+      <span class="db-chip"><i class="bi bi-shield-lock"></i> Student access control</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table align-middle text-center mb-0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Joined</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if ($studentsResult && $studentsResult->num_rows > 0): ?>
+            <?php while ($student = $studentsResult->fetch_assoc()): ?>
+              <?php $isBlocked = !empty($student['is_blocked']); ?>
+              <tr>
+                <td class="fw-semibold"><?php echo htmlspecialchars($student['name']); ?></td>
+                <td><?php echo htmlspecialchars($student['email']); ?></td>
+                <td class="small"><?php echo date("d M Y", strtotime($student['created_at'])); ?></td>
+                <td>
+                  <span class="status-badge <?php echo $isBlocked ? 'blocked-user' : 'active-user'; ?>">
+                    <i class="bi <?php echo $isBlocked ? 'bi-person-x-fill' : 'bi-person-check-fill'; ?>"></i>
+                    <?php echo $isBlocked ? 'Blocked' : 'Active'; ?>
+                  </span>
+                </td>
+                <td>
+                  <form method="POST" action="toggle_student_status.php" class="d-inline">
+                    <input type="hidden" name="student_id" value="<?php echo (int) $student['id']; ?>">
+                    <input type="hidden" name="target_status" value="<?php echo $isBlocked ? 'active' : 'blocked'; ?>">
+                    <button type="submit" class="btn btn-sm <?php echo $isBlocked ? 'btn-outline-success' : 'btn-outline-danger'; ?> action-btn">
+                      <i class="bi <?php echo $isBlocked ? 'bi-person-check' : 'bi-person-x'; ?>"></i>
+                      <?php echo $isBlocked ? 'Unblock Login' : 'Block Login'; ?>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          <?php else: ?>
+            <tr>
+              <td colspan="5" class="text-muted py-4">No student accounts found yet.</td>
             </tr>
           <?php endif; ?>
         </tbody>

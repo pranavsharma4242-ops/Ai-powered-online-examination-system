@@ -8,18 +8,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email    = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Identify role
-    $role = ($email === 'saggy@gmail.com') ? 'admin' : 'student';
-
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = ?");
-    $stmt->bind_param("ss", $email, $role);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result && $result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        if (password_verify($password, $user['password'])) {
+        if (!empty($user['is_blocked'])) {
+            $msg = "Your account has been blocked by the admin.";
+        } elseif (password_verify($password, $user['password'])) {
+            session_regenerate_id(true);
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role']    = $user['role'];
             $_SESSION['name']    = $user['name'];
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $msg = " Invalid password!";
         }
     } else {
-        $msg = "User not found or role mismatch!";
+        $msg = "User not found!";
     }
 }
 ?>
