@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `users` (`name`, `email`, `password`, `role`)
-SELECT 'Admin', 'saggy@gmail.com', '$2y$10$AFt38BD7f0ZhKtCDW.lO6O8PdNygLJemsheRr6RV6gQFDOjHebwyO', 'admin'
+SELECT 'Admin', 'saggy07@gmail.com', '$2y$10$.lQIlr6fUUpbP032Ctp0vOQUDbg.OadK5b7itgw8A5cZURbO3laoO', 'admin'
 WHERE NOT EXISTS (
-  SELECT 1 FROM `users` WHERE `email` = 'saggy@gmail.com'
+  SELECT 1 FROM `users` WHERE `email` = 'saggy07@gmail.com'
 );

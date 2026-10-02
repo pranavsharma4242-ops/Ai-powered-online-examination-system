@@ -136,10 +136,10 @@ if ($statsResult && $statsResult->num_rows === 1) {
 
     <main class="main">
       <div class="topbar">
-        <div class="search-shell"><i class="bi bi-search"></i><input type="text" placeholder="Search notes, subjects or videos..."></div>
+        <!-- <div class="search-shell"><i class="bi bi-search"></i><input type="text" placeholder="Search notes, subjects or videos..."></div> -->
         <div class="top-actions">
           <a href="video_lessons.php" class="notify-btn"><i class="bi bi-bell"></i></a>
-          <a href="profile.php" class="profile-pill"><span class="avatar"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></span><span><?php echo htmlspecialchars($user['name']); ?></span></a>
+          <!-- <a href="profile.php" class="profile-pill"><span class="avatar"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></span><span><?php echo htmlspecialchars($user['name']); ?></span></a> -->
         </div>
       </div>
 

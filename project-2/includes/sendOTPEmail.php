@@ -18,12 +18,11 @@ function sendOTPEmail($email, $otp) {
         $mail->Password   = "wjxktpolcdwadsul";               
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
-
-        // Recipients
+  
         $mail->setFrom('sagniksaha847@gmail.com', 'NoteMarket');
         $mail->addAddress($email);
 
-        // Email content
+
         $mail->isHTML(true);
         $mail->Subject = 'Your OTP for NoteMarket';
         $mail->Body    = "<h2>Your OTP is <strong>$otp</strong></h2><p>This OTP is valid for 10 minutes.</p>";

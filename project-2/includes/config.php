@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Keep the local database aligned with the app fields used by the UI.
+
 $youtubeColumn = $conn->query("SHOW COLUMNS FROM notes_final LIKE 'youtube_link'");
 if ($youtubeColumn && $youtubeColumn->num_rows === 0) {
     $conn->query("ALTER TABLE notes_final ADD COLUMN youtube_link VARCHAR(255) DEFAULT NULL AFTER image_path");

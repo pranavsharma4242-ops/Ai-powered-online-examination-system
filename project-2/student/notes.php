@@ -314,6 +314,7 @@ $noteCount = $result->num_rows;
       <a href="dashboard.php" class="side-link"><i class="bi bi-grid"></i> Dashboard</a>
       <a href="notes.php?type=free" class="side-link active"><i class="bi bi-file-earmark-text"></i> My Notes</a>
       <a href="video_lessons.php" class="side-link"><i class="bi bi-camera-video"></i> Video Lessons</a>
+       
       <a href="profile.php" class="side-link"><i class="bi bi-person"></i> My Profile</a>
       <a href="premium.php" class="side-link"><i class="bi bi-gem"></i> Premium</a>
       <a href="settings.php" class="side-link"><i class="bi bi-gear"></i> Settings</a>
@@ -332,7 +333,8 @@ $noteCount = $result->num_rows;
           <i class="bi bi-search"></i><input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search by subject or topic">
         </form>
         <div class="top-actions">
-          <a href="video_lessons.php" class="notify-btn"><i class="bi bi-bell"></i></a>
+          <!-- <a href="#video_lessons.php" class="notify-btn"><i class="bi bi-bell"></i></a> -->
+           
           <a href="profile.php" class="profile-pill"><span class="avatar"><?php echo strtoupper(substr($_SESSION['name'], 0, 1)); ?></span><span><?php echo htmlspecialchars($_SESSION['name']); ?></span></a>
         </div>
       </div>
